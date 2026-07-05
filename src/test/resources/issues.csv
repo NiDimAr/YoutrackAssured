@@ -1,0 +1,6 @@
+summary,description
+Login Bug,Login button does not work
+Registration Bug,Registration form is broken
+Search Bug,Search returns incorrect results
+Profile Bug,Profile page is unavailable
+Password Reset Bug,Reset email is not sent
