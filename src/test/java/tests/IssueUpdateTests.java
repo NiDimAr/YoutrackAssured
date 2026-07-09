@@ -2,6 +2,7 @@ package tests;
 
 import dto.request.IssueRequest;
 import dto.response.IssueResponse;
+import factory.IssueFactory;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Test;
 
@@ -12,24 +13,40 @@ public class IssueUpdateTests extends BaseTest {
     @Test
     void shouldUpdateIssue() {
 
-        String issueId = createIssue(
+        IssueRequest createRequest = IssueFactory.create(
                 "Original " + java.util.UUID.randomUUID(),
                 "Original description"
         );
 
-        IssueRequest updateRequest = createIssueRequest(
+
+        String issueId = issueService.createIssue(createRequest);
+
+
+        IssueRequest updateRequest = IssueFactory.create(
                 "Updated Summary",
                 "Updated description"
         );
 
-        Response updateResponse = issueClient.updateIssue(issueId, updateRequest);
 
-        updateResponse.then().statusCode(200);
+        Response updateResponse = issueClient.updateIssue(
+                issueId,
+                updateRequest
+        );
+
+
+        updateResponse.then()
+                .statusCode(200);
+
 
         Response getResponse = issueClient.getIssue(issueId);
 
+
         IssueResponse updated = getResponse.as(IssueResponse.class);
 
-        assertEquals("Updated Summary", updated.getSummary());
+
+        assertEquals(
+                "Updated Summary",
+                updated.getSummary()
+        );
     }
 }

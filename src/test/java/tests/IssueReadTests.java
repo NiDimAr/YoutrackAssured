@@ -1,6 +1,8 @@
 package tests;
 
+import dto.request.IssueRequest;
 import dto.response.IssueResponse;
+import factory.IssueFactory;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Test;
 
@@ -11,17 +13,26 @@ public class IssueReadTests extends BaseTest {
     @Test
     void shouldGetIssueById() {
 
-            String issueId = createIssue(
-                    "Get Issue " + java.util.UUID.randomUUID(),
-                    "Check GET by id"
-            );
 
-            Response response = issueClient.getIssue(issueId);
+        IssueRequest request = IssueFactory.create(
+                "Get Issue " + java.util.UUID.randomUUID(),
+                "Check GET by id"
+        );
 
-            response.then().statusCode(200);
 
-            IssueResponse issue = response.as(IssueResponse.class);
+        String issueId = issueService.createIssue(request);
 
-            assertEquals(issueId, issue.getId());
+
+        Response response = issueClient.getIssue(issueId);
+
+
+        response.then()
+                .statusCode(200);
+
+
+        IssueResponse issue = response.as(IssueResponse.class);
+
+
+        assertEquals(issueId, issue.getId());
         }
     }

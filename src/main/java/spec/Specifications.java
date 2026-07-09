@@ -1,13 +1,14 @@
-package config;
+package spec;
 
+import config.ConfigProvider;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.specification.RequestSpecification;
 
 import static io.restassured.http.ContentType.JSON;
 
-public class RestAssuredConfig {
+public class Specifications {
 
-    private RestAssuredConfig() {
+    private Specifications() {
     }
 
     public static RequestSpecification requestSpecification() {
