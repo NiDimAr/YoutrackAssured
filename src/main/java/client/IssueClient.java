@@ -3,50 +3,72 @@ package client;
 import config.ApiEndpoints;
 import config.ApiFields;
 import dto.request.IssueRequest;
+import io.qameta.allure.Step;
 import io.restassured.response.Response;
-import spec.Specifications;
+import spec.RequestSpecifications;
+import spec.ResponseSpecifications;
 
 import static io.restassured.RestAssured.given;
 
 public class IssueClient {
 
+    @Step("Отправить запрос на создание задачи")
     public Response createIssue(IssueRequest issueRequest) {
 
         return given()
-                .spec(Specifications.requestSpecification())
+                .spec(RequestSpecifications.requestSpecification())
                 .queryParam("fields", ApiFields.ISSUE)
                 .body(issueRequest)
                 .when()
-                .post(ApiEndpoints.ISSUES);
+                .post(ApiEndpoints.ISSUES)
+                .then()
+                .spec(ResponseSpecifications.responseSpecification())
+                .extract()
+                .response();
     }
 
 
+    @Step("Отправить запрос на получение задачи: {issueId}")
     public Response getIssue(String issueId) {
 
         return given()
-                .spec(Specifications.requestSpecification())
+                .spec(RequestSpecifications.requestSpecification())
                 .queryParam("fields", ApiFields.ISSUE)
                 .when()
-                .get(ApiEndpoints.ISSUES + "/" + issueId);
+                .get(ApiEndpoints.ISSUES + "/" + issueId)
+                .then()
+                .spec(ResponseSpecifications.responseSpecification())
+                .extract()
+                .response();
     }
 
 
+    @Step("Отправить запрос на обновление задачи: {issueId}")
     public Response updateIssue(String issueId, IssueRequest issueRequest) {
 
         return given()
-                .spec(Specifications.requestSpecification())
+                .spec(RequestSpecifications.requestSpecification())
                 .queryParam("fields", ApiFields.ISSUE)
                 .body(issueRequest)
                 .when()
-                .post(ApiEndpoints.ISSUES + "/" + issueId);
+                .post(ApiEndpoints.ISSUES + "/" + issueId)
+                .then()
+                .spec(ResponseSpecifications.responseSpecification())
+                .extract()
+                .response();
     }
 
 
+    @Step("Отправить запрос на удаление задачи: {issueId}")
     public Response deleteIssue(String issueId) {
 
         return given()
-                .spec(Specifications.requestSpecification())
+                .spec(RequestSpecifications.requestSpecification())
                 .when()
-                .delete(ApiEndpoints.ISSUES + "/" + issueId);
+                .delete(ApiEndpoints.ISSUES + "/" + issueId)
+                .then()
+                .spec(ResponseSpecifications.responseSpecification())
+                .extract()
+                .response();
     }
 }
