@@ -22,11 +22,24 @@ public class IssueClient {
                 .when()
                 .post(ApiEndpoints.ISSUES)
                 .then()
-                .spec(ResponseSpecifications.responseSpecification())
+                .spec(ResponseSpecifications.successResponse())
                 .extract()
                 .response();
     }
+    @Step("Отправить запрос на создание задачи без проверки")
+    public void createIssueExpectBadRequest(IssueRequest issueRequest) {
 
+        given()
+                .spec(RequestSpecifications.requestSpecification())
+                .queryParam("fields", ApiFields.ISSUE)
+                .body(issueRequest)
+                .when()
+                .post(ApiEndpoints.ISSUES)
+                .then()
+                .spec(ResponseSpecifications.badRequestResponse())
+                .extract()
+                .response();
+    }
 
     @Step("Отправить запрос на получение задачи: {issueId}")
     public Response getIssue(String issueId) {
@@ -37,7 +50,7 @@ public class IssueClient {
                 .when()
                 .get(ApiEndpoints.ISSUES + "/" + issueId)
                 .then()
-                .spec(ResponseSpecifications.responseSpecification())
+                .spec(ResponseSpecifications.successResponse())
                 .extract()
                 .response();
     }
@@ -53,7 +66,7 @@ public class IssueClient {
                 .when()
                 .post(ApiEndpoints.ISSUES + "/" + issueId)
                 .then()
-                .spec(ResponseSpecifications.responseSpecification())
+                .spec(ResponseSpecifications.successResponse())
                 .extract()
                 .response();
     }
@@ -62,12 +75,24 @@ public class IssueClient {
     @Step("Отправить запрос на удаление задачи: {issueId}")
     public Response deleteIssue(String issueId) {
 
-        return given()
+         return given()
                 .spec(RequestSpecifications.requestSpecification())
                 .when()
                 .delete(ApiEndpoints.ISSUES + "/" + issueId)
                 .then()
-                .spec(ResponseSpecifications.responseSpecification())
+                .spec(ResponseSpecifications.successResponse())
+                .extract()
+                .response();
+    }
+    @Step("Проверить что задача не найдена: {issueId}")
+    public void getDeletedIssue(String issueId) {
+
+        given()
+                .spec(RequestSpecifications.requestSpecification())
+                .when()
+                .get(ApiEndpoints.ISSUES + "/" + issueId)
+                .then()
+                .spec(ResponseSpecifications.notFoundResponse())
                 .extract()
                 .response();
     }

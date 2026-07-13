@@ -4,7 +4,6 @@ import dto.request.IssueRequest;
 import dto.response.IssueResponse;
 import factory.IssueFactory;
 import io.qameta.allure.*;
-import io.restassured.response.Response;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -34,17 +33,12 @@ public class IssueUpdateTests extends BaseTest {
                 "Updated description"
         );
 
-        Response updateResponse = issueService.updateIssue(
+        issueService.updateIssue(
                 issueId,
                 updateRequest
         );
 
-        updateResponse.then()
-                .statusCode(200);
-
-        Response getResponse = issueService.getIssue(issueId);
-
-        IssueResponse updated = getResponse.as(IssueResponse.class);
+        IssueResponse updated = issueService.getIssueById(issueId);
 
         assertEquals(
                 "Updated Summary",

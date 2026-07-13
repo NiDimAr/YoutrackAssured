@@ -3,7 +3,6 @@ package tests;
 import dto.request.IssueRequest;
 import factory.IssueFactory;
 import io.qameta.allure.*;
-import io.restassured.response.Response;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
@@ -26,11 +25,7 @@ public class IssueNegativeTests extends BaseTest {
                 description
         );
 
-        Response response = issueService.createIssueWithoutValidation(request);
+        issueService.createIssueExpectBadRequest(request);
 
-        response.then()
-                .log()
-                .all()
-                .statusCode(400);
     }
 }

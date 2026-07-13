@@ -11,42 +11,52 @@ public class IssueService {
 
 
     public IssueService() {
-
         this.issueClient = new IssueClient();
     }
+
 
     @Step("Создать задачу")
     public String createIssue(IssueRequest request) {
 
         Response response = issueClient.createIssue(request);
 
-        response.then()
-                .statusCode(200);
-
         return response.as(IssueResponse.class)
                 .getId();
     }
+
+
     @Step("Получить задачу по id: {issueId}")
-    public Response getIssue(String issueId) {
+    public IssueResponse getIssueById(String issueId) {
 
-        return issueClient.getIssue(issueId);
+        Response response = issueClient.getIssue(issueId);
+
+        return response.as(IssueResponse.class);
     }
+
+
     @Step("Создать задачу с невалидными данными")
-    public Response createIssueWithoutValidation(IssueRequest request) {
+    public void createIssueExpectBadRequest(IssueRequest request) {
 
-        return issueClient.createIssue(request);
+        issueClient.createIssueExpectBadRequest(request);
     }
+
 
     @Step("Обновить задачу с id: {issueId}")
-    public Response updateIssue(String issueId, IssueRequest request) {
+    public void updateIssue(String issueId, IssueRequest request) {
 
-        return issueClient.updateIssue(issueId, request);
+        issueClient.updateIssue(issueId, request);
     }
 
 
     @Step("Удалить задачу с id: {issueId}")
-    public Response deleteIssue(String issueId) {
+    public void deleteIssue(String issueId) {
 
-        return issueClient.deleteIssue(issueId);
+        issueClient.deleteIssue(issueId);
     }
+    @Step("Проверить что задача не найдена: {issueId}")
+    public void getDeletedIssue(String issueId) {
+
+        issueClient.getDeletedIssue(issueId);
+    }
+
 }

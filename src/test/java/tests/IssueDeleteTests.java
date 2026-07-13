@@ -3,11 +3,8 @@ package tests;
 import dto.request.IssueRequest;
 import factory.IssueFactory;
 import io.qameta.allure.*;
-import io.restassured.response.Response;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Epic("Управление задачами")
 @Feature("Удаление задач")
@@ -28,16 +25,9 @@ public class IssueDeleteTests extends BaseTest {
 
         String issueId = issueService.createIssue(request);
 
-        Response deleteResponse = issueService.deleteIssue(issueId);
+        issueService.deleteIssue(issueId);
 
-        deleteResponse.then()
-                .statusCode(200);
+        issueService.getDeletedIssue(issueId);
 
-        Response getResponse = issueService.getIssue(issueId);
-
-        assertEquals(
-                404,
-                getResponse.statusCode()
-        );
     }
 }

@@ -4,7 +4,6 @@ import dto.request.IssueRequest;
 import dto.response.IssueResponse;
 import factory.IssueFactory;
 import io.qameta.allure.*;
-import io.restassured.response.Response;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -29,13 +28,11 @@ public class IssueReadTests extends BaseTest {
 
         String issueId = issueService.createIssue(request);
 
-        Response response = issueService.getIssue(issueId);
+        IssueResponse issue = issueService.getIssueById(issueId);
 
-        response.then()
-                .statusCode(200);
-
-        IssueResponse issue = response.as(IssueResponse.class);
-
-        assertEquals(issueId, issue.getId());
+        assertEquals(
+                issueId,
+                issue.getId()
+        );
     }
 }
